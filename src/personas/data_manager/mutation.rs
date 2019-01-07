@@ -7,11 +7,12 @@
 // permissions and limitations relating to use of the SAFE Network Software.
 
 use super::data::{Data, DataId};
-use log::Level;
+use log::{log, Level};
 use maidsafe_utilities::serialisation::serialised_size;
-use routing::{EntryAction, ImmutableData, MutableData, PermissionSet, User, XorName};
+use routing::{EntryAction, ImmutableData, MutableData, PermissionSet, User, XorName, log_or_panic};
 use rust_sodium::crypto::sign;
 use std::collections::{BTreeMap, BTreeSet};
+use serde_derive::Serialize;
 
 #[derive(Serialize)]
 pub enum Mutation {

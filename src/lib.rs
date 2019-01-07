@@ -236,37 +236,30 @@
 // requires to make changes to public functions.
 #![cfg_attr(feature = "cargo-clippy", allow(needless_pass_by_value))]
 
-extern crate accumulator;
 #[cfg(any(test, feature = "use-mock-crust", feature = "use-mock-routing"))]
-extern crate fake_clock;
-extern crate hex;
+use fake_clock;
+use hex;
 #[cfg(feature = "use-mock-crust")]
-extern crate itertools;
-#[macro_use]
-extern crate log;
-extern crate config_file_handler;
-extern crate lru_time_cache;
-extern crate maidsafe_utilities;
-#[macro_use]
-extern crate quick_error;
+use itertools;
+use log;
+use config_file_handler;
+use lru_time_cache;
+use maidsafe_utilities;
+use quick_error;
 #[cfg(any(test, feature = "use-mock-crust", feature = "use-mock-routing"))]
-extern crate rand;
-#[macro_use]
-extern crate routing;
+use rand;
+use routing;
 #[cfg(not(feature = "use-mock-crypto"))]
-extern crate rust_sodium;
-extern crate serde;
-#[macro_use]
-extern crate serde_derive;
-extern crate serde_json;
-extern crate tempdir;
-extern crate tiny_keccak;
-#[macro_use]
-extern crate unwrap;
+use rust_sodium;
+use serde;
+use serde_derive;
+use serde_json;
+use tempdir;
+use tiny_keccak;
+use unwrap;
 
 /// For unit and integration tests only
 #[cfg(any(feature = "use-mock-crust", feature = "use-mock-routing"))]
-#[macro_use]
 pub mod test_utils;
 
 /// For integration tests only
@@ -284,14 +277,14 @@ mod personas;
 mod utils;
 mod vault;
 
-pub use config_handler::Config;
-pub use personas::data_manager::DataId;
+pub use self::config_handler::Config;
+pub use self::personas::data_manager::DataId;
 #[cfg(feature = "use-mock-crust")]
-pub use personas::data_manager::PENDING_WRITE_TIMEOUT_SECS;
-pub use personas::maid_manager::DEFAULT_MAX_OPS_COUNT;
+pub use self::personas::data_manager::PENDING_WRITE_TIMEOUT_SECS;
+pub use self::personas::maid_manager::DEFAULT_MAX_OPS_COUNT;
 #[cfg(feature = "use-mock-crypto")]
 use routing::mock_crypto::rust_sodium;
-pub use vault::Vault;
+pub use self::vault::Vault;
 
 /// The type tag of invitations to create an account.
 pub const TYPE_TAG_INVITE: u64 = 8;

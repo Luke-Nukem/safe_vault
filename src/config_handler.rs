@@ -7,10 +7,11 @@
 // permissions and limitations relating to use of the SAFE Network Software.
 
 use config_file_handler::{self, FileHandler};
-use error::InternalError;
+use crate::error::InternalError;
 use routing::XorName;
 use rust_sodium::crypto::sign;
 use std::ffi::OsString;
+use serde_derive::{Deserialize, Serialize};
 
 /// Lets a vault configure a wallet address and storage limit.
 #[derive(Clone, Debug, Default, Deserialize, Serialize)]

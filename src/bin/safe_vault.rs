@@ -58,14 +58,11 @@
     variant_size_differences
 )]
 
-#[macro_use]
-extern crate log;
-extern crate clap;
-extern crate config_file_handler;
-extern crate maidsafe_utilities;
-extern crate safe_vault;
-#[macro_use]
-extern crate unwrap;
+use config_file_handler::exe_file_stem;
+use maidsafe_utilities;
+use safe_vault;
+use unwrap::unwrap;
+use log::info;
 
 use clap::{App, Arg};
 use safe_vault::Vault;
@@ -77,7 +74,7 @@ pub fn main() {
     // TODO - remove the following line once maidsafe_utilities is updated to use log4rs v4.
     let _ = fs::remove_file("Node.log");
 
-    let name = config_file_handler::exe_file_stem().unwrap_or_else(|_| OsString::new());
+    let name = exe_file_stem().unwrap_or_else(|_| OsString::new());
     let name_and_version = format!("{} v{}", name.to_string_lossy(), env!("CARGO_PKG_VERSION"));
 
     let matches = App::new(name.to_string_lossy())

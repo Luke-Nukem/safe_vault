@@ -9,6 +9,7 @@ name = "safe_vault"
 readme = "README.md"
 repository = "https://github.com/maidsafe/safe_vault"
 version = "0.18.0"
+edition = "2018"
 
 [dependencies]
 accumulator = "~0.7.0"
@@ -23,7 +24,7 @@ maidsafe_utilities = "~0.16.0"
 quick-error = "~1.2.1"
 rand = "~0.4.2"
 routing = "~0.37.0"
-rust_sodium = "~0.10.1"
+rust_sodium = "~0.10.0"
 serde = "~1.0.37"
 serde_derive = "~1.0.37"
 serde_json = "~1.0.13"
@@ -46,3 +47,9 @@ name = "tests"
 [[bin]]
 name = "safe_vault"
 doc = false
+
+[profile.release]
+opt-level = 3
+debug = false
+rpath = false
+lto = true
