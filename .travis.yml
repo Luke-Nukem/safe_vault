@@ -1,6 +1,6 @@
 vars:
-  - &stable "1.28.0"
-  - &nightly "nightly-2018-07-07"
+  - &stable "1.31.1"
+  - &nightly "nightly-2019-01-07"
 
 # Env variables:
 #
@@ -15,9 +15,9 @@ env:
     - PROJECT_NAME=safe_vault
     - PATH=$PATH:$HOME/.cargo/bin:$HOME/musl/bin
     - RUST_BACKTRACE=1
-    - RUST_STABLE=1.28.0
-    - RUST_NIGHTLY=nightly-2018-07-07
-    - RUST_RUSTFMT=0.99.2
+    - RUST_STABLE=1.31.1
+    - RUST_NIGHTLY=nightly-2019-01-07
+    - RUST_RUSTFMT=1.0.0
     - RUST_CLIPPY=0.0.212
 
 sudo: false
