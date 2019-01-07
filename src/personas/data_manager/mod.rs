@@ -11,12 +11,16 @@ use self::cache::{Cache, FragmentInfo, MutationVote, PendingWrite};
 pub use self::data::{Data, DataId, ImmutableDataId, MutableDataId};
 use self::mutable_data_cache::MutableDataCache;
 use self::mutation::{Mutation, MutationType};
-use accumulator::Accumulator;
 use crate::authority::ClientManagerAuthority;
-#[cfg(feature = "use-mock-crust")]
-use chunk_store::Error as ChunkStoreError;
 use crate::chunk_store::{Chunk, ChunkId, ChunkStore};
 use crate::error::InternalError;
+use crate::utils::{self, HashMap, HashSet, Instant};
+use crate::vault::Refresh as VaultRefresh;
+use crate::vault::RoutingNode;
+use accumulator::Accumulator;
+#[cfg(feature = "use-mock-crust")]
+use chunk_store::Error as ChunkStoreError;
+use log::{error, info, trace, warn};
 use maidsafe_utilities::serialisation;
 use routing::{
     Authority, ClientError, EntryAction, ImmutableData, MessageId, MutableData, PermissionSet,
@@ -24,16 +28,12 @@ use routing::{
     TYPE_TAG_SESSION_PACKET,
 };
 use rust_sodium::crypto::sign;
+use serde_derive::{Deserialize, Serialize};
 use std::collections::{BTreeMap, BTreeSet};
 use std::convert::From;
 use std::fmt::{self, Debug, Formatter};
 use std::time::Duration;
 use tiny_keccak;
-use crate::utils::{self, HashMap, HashSet, Instant};
-use crate::vault::Refresh as VaultRefresh;
-use crate::vault::RoutingNode;
-use serde_derive::{Deserialize, Serialize};
-use log::{info, trace, error, warn};
 
 const MAX_FULL_PERCENT: u64 = 50;
 /// The timeout for accumulating refresh messages.
@@ -656,9 +656,7 @@ impl DataManager {
                     ref key,
                     hash,
                     ..
-                }
-                    if hash == actual_hash =>
-                {
+                } if hash == actual_hash => {
                     self.cache.remove_needed_fragment(&fragment);
                     Some((name, tag, key.clone()))
                 }
@@ -1092,7 +1090,8 @@ impl DataManager {
                         .filter_map(|key| {
                             data.get(&key)
                                 .map(|value| FragmentInfo::mutable_data_entry(data, key, value))
-                        }).collect()
+                        })
+                        .collect()
                 })
             }
             Mutation::SetMDataUserPermissions {
@@ -1499,7 +1498,8 @@ impl DataManager {
                 } else {
                     None
                 }
-            }).map(|delayed_refresh| self.handle_group_refresh(routing_node, delayed_refresh));
+            })
+            .map(|delayed_refresh| self.handle_group_refresh(routing_node, delayed_refresh));
     }
 
     fn get_version(&self, data_id: &DataId) -> Result<u64, ChunkStoreError> {

@@ -8,19 +8,19 @@
 
 use crate::authority::{ClientAuthority, ClientManagerAuthority};
 use crate::cache::Cache;
-#[cfg(feature = "use-mock-crust")]
-use chunk_store::Error as ChunkStoreError;
 use crate::config_handler::{self, Config};
 use crate::error::InternalError;
+#[cfg(feature = "use-mock-crust")]
+use crate::personas::data_manager::DataId;
+use crate::personas::data_manager::{self, DataManager};
+use crate::personas::maid_manager::{self, MaidManager};
+#[cfg(feature = "use-mock-crust")]
+use chunk_store::Error as ChunkStoreError;
 use maidsafe_utilities::serialisation;
 #[cfg(all(test, feature = "use-mock-routing"))]
 pub use mock_routing::Node as RoutingNode;
 #[cfg(all(test, feature = "use-mock-routing"))]
 use mock_routing::NodeBuilder;
-#[cfg(feature = "use-mock-crust")]
-use crate::personas::data_manager::DataId;
-use crate::personas::data_manager::{self, DataManager};
-use crate::personas::maid_manager::{self, MaidManager};
 #[cfg(feature = "use-mock-crypto")]
 use routing::mock_crypto::rust_sodium;
 #[cfg(feature = "use-mock-crust")]
@@ -35,8 +35,8 @@ use routing::{Authority, EventStream, Request, Response, RoutingTable, XorName};
 use rust_sodium;
 use rust_sodium::crypto::sign;
 
+use log::{debug, warn};
 use serde_derive::{Deserialize, Serialize};
-use log::{warn, debug};
 
 /// Main struct to hold all personas and Routing instance
 pub struct Vault {

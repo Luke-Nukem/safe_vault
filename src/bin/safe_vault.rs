@@ -59,10 +59,10 @@
 )]
 
 use config_file_handler::exe_file_stem;
+use log::info;
 use maidsafe_utilities;
 use safe_vault;
 use unwrap::unwrap;
-use log::info;
 
 use clap::{App, Arg};
 use safe_vault::Vault;

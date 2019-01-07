@@ -16,6 +16,10 @@ pub use self::account::DEFAULT_MAX_OPS_COUNT;
 use self::message_id_accumulator::MessageIdAccumulator;
 use crate::authority::{ClientAuthority, ClientManagerAuthority};
 use crate::error::InternalError;
+use crate::utils::{self, HashMap};
+use crate::vault::Refresh as VaultRefresh;
+use crate::vault::RoutingNode;
+use crate::TYPE_TAG_INVITE;
 use lru_time_cache::LruCache;
 use maidsafe_utilities::serialisation;
 use routing::{
@@ -28,13 +32,9 @@ use std::collections::hash_map::{Entry, VacantEntry};
 use std::collections::{BTreeMap, BTreeSet};
 use std::time::Duration;
 use tiny_keccak;
-use crate::utils::{self, HashMap};
-use crate::vault::Refresh as VaultRefresh;
-use crate::vault::RoutingNode;
-use crate::TYPE_TAG_INVITE;
 
+use log::{debug, error, info, trace};
 use serde_derive::{Deserialize, Serialize};
-use log::{info, trace, error, debug};
 use unwrap::unwrap;
 
 /// The timeout for accumulating refresh messages.
@@ -209,7 +209,8 @@ impl MaidManager {
                         INVITE_CLAIMED_KEY.to_vec(),
                         INVITE_CLAIMED_VALUE.to_vec(),
                         0,
-                    ).into();
+                    )
+                    .into();
 
                 routing_node.send_mutate_mdata_entries_request(
                     invite_src,
@@ -635,7 +636,8 @@ impl MaidManager {
                 } else {
                     None
                 }
-            }).collect();
+            })
+            .collect();
         for msg_id in msg_ids_to_delete {
             let _ = self.request_cache.remove(&msg_id);
         }
@@ -959,11 +961,12 @@ impl MaidManager {
             .accounts
             .get(dst.name())
             .ok_or(ClientError::NoSuchAccount)?;
-        let allowed = src.name() == dst.name() || if AuthPolicy::Key == policy {
-            account.keys.contains(src.client_key())
-        } else {
-            false
-        };
+        let allowed = src.name() == dst.name()
+            || if AuthPolicy::Key == policy {
+                account.keys.contains(src.client_key())
+            } else {
+                false
+            };
 
         if !allowed {
             return Err(ClientError::AccessDenied);

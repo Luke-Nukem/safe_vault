@@ -236,13 +236,13 @@
 // requires to make changes to public functions.
 #![cfg_attr(feature = "cargo-clippy", allow(needless_pass_by_value))]
 
+use config_file_handler;
 #[cfg(any(test, feature = "use-mock-crust", feature = "use-mock-routing"))]
 use fake_clock;
 use hex;
 #[cfg(feature = "use-mock-crust")]
 use itertools;
 use log;
-use config_file_handler;
 use lru_time_cache;
 use maidsafe_utilities;
 use quick_error;
@@ -282,9 +282,9 @@ pub use self::personas::data_manager::DataId;
 #[cfg(feature = "use-mock-crust")]
 pub use self::personas::data_manager::PENDING_WRITE_TIMEOUT_SECS;
 pub use self::personas::maid_manager::DEFAULT_MAX_OPS_COUNT;
+pub use self::vault::Vault;
 #[cfg(feature = "use-mock-crypto")]
 use routing::mock_crypto::rust_sodium;
-pub use self::vault::Vault;
 
 /// The type tag of invitations to create an account.
 pub const TYPE_TAG_INVITE: u64 = 8;

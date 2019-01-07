@@ -6,12 +6,12 @@
 // KIND, either express or implied. Please review the Licences for the specific language governing
 // permissions and limitations relating to use of the SAFE Network Software.
 
-use config_file_handler::{self, FileHandler};
 use crate::error::InternalError;
+use config_file_handler::{self, FileHandler};
 use routing::XorName;
 use rust_sodium::crypto::sign;
-use std::ffi::OsString;
 use serde_derive::{Deserialize, Serialize};
+use std::ffi::OsString;
 
 /// Lets a vault configure a wallet address and storage limit.
 #[derive(Clone, Debug, Default, Deserialize, Serialize)]

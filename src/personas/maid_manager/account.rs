@@ -8,8 +8,8 @@
 
 use routing::{AccountInfo, MessageId};
 use rust_sodium::crypto::sign;
-use std::collections::BTreeSet;
 use serde_derive::{Deserialize, Serialize};
+use std::collections::BTreeSet;
 
 /// Default available number of operations per account.
 #[cfg(not(feature = "use-mock-crust"))]
